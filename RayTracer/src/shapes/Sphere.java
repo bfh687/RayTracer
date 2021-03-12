@@ -8,7 +8,6 @@ import utility.Vector3D;
 public class Sphere extends Intersectable {
 	private Point3D center;
 	private double radius;
-	private Material material;
 	
 	public Sphere(Point3D center, double radius, Material material) {
 		this.center = center;
@@ -47,10 +46,6 @@ public class Sphere extends Intersectable {
 	
 	public double getRadius() {
 		return radius;
-	}
-	
-	public Material getMaterial() {
-		return material;
 	}
 	
 	@Override

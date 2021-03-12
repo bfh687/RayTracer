@@ -24,6 +24,13 @@ public class Vector3D {
 		double mag = magnitude();
 		return new Vector3D(x / mag, y / mag, z / mag);
 	}
+	
+	public Vector3D cross(Vector3D otherVector) {
+		double x = (this.y * otherVector.getZ()) - (this.z * otherVector.getY());
+		double y = (this.z * otherVector.getX()) - (this.z * otherVector.getZ());
+		double z = (this.x * otherVector.getY()) - (this.z * otherVector.getX());
+		return new Vector3D(x, y, z);
+	}
 
 	public double dotProduct(Vector3D otherVector) {
 		double x = this.x * otherVector.getX();

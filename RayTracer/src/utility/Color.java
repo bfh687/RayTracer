@@ -24,7 +24,6 @@ public class Color {
 		if (scalar < 0) {
 			throw new IllegalArgumentException("Cannot multiply a Color by a negative scalar");
 		}
-		
 		double r = Math.min(this.r * scalar, 1.0);
 		double g = Math.min(this.g * scalar, 1.0);
 		double b = Math.min(this.b * scalar, 1.0);
