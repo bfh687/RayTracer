@@ -1,6 +1,6 @@
 package utility;
 
-
+// represents a vector in 3d space
 public class Vector3D {
 	private double x, y, z;
 	

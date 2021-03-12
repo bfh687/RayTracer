@@ -1,5 +1,6 @@
 package utility;
 
+// color class
 public class Color {
 	private double r, g, b;
 	

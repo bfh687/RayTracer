@@ -109,6 +109,7 @@ public class Driver {
 		boolean isShadow = isShadow(hitPos, hitNormal, sList);
 		color.add(colorAt(objHit, hitPos, hitNormal, isShadow));
 		
+		// reflections via recursion
 		if (depth < 3) {
 			Vector3D newRayPos = hitPos.add(hitNormal.multiply(.0001));
 			Vector3D newRayDir = ray.getDirection().subtract((hitNormal.multiply((ray.getDirection().dotProduct(hitNormal)) * 2)));

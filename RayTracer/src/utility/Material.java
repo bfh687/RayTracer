@@ -1,6 +1,6 @@
 package utility;
 
-// class that lets us know how the object will react to light
+// class that lets us know how the object will react to light(s)
 public class Material {
 	private Color color1; // weird
 	private Color color2;

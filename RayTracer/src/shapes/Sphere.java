@@ -5,6 +5,7 @@ import utility.Point3D;
 import utility.Ray;
 import utility.Vector3D;
 
+// sphere class
 public class Sphere extends Intersectable {
 	private Point3D center;
 	private double radius;

@@ -1,5 +1,6 @@
 package utility;
 
+// 3d point in space
 public class Point3D {
 	private double x, y, z;
 	

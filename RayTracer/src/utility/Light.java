@@ -1,5 +1,6 @@
 package utility;
 
+// represents a light
 public class Light {
 	private Point3D position;
 	private Color color;
