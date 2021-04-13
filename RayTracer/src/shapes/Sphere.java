@@ -48,9 +48,4 @@ public class Sphere extends Intersectable {
 	public double getRadius() {
 		return radius;
 	}
-	
-	@Override
-	public String toString() {
-		return "Sphere[" + center.toString() + ", " + radius + ", " + material.getColor().toString() + "]";
-	}
 }
