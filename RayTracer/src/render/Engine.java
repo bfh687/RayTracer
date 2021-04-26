@@ -11,19 +11,41 @@ import utility.Material;
 import utility.Ray;
 import utility.Vector3D;
 
+/**
+ * The engine class used to handle rendering of the raytracing algorithm.
+ * @author bfh687
+ */
 public class Engine {
 	
+	/**
+	 * The scene.
+	 */
 	private Scene scene;
+	
+	/**
+	 * The camera.
+	 */
 	private Camera camera;
 	
-	
+	/**
+	 * Creates a new Engine object with the given scene and camera.
+	 * @param scene The scene to be rendered.
+	 * @param camera The camera to view the scene.
+	 */
 	public Engine(Scene scene, Camera camera) {
 		this.scene = scene;
 		this.camera = camera;
 	}
 	
+	/**
+	 * Renders a image of the camera's current view with the given height,
+	 * width, and render resolution.
+	 * @param width Width of the rendered image.
+	 * @param height Height of the rendered image.
+	 * @param resolution Render scaling resolution.
+	 * @return A rendered image of the current camera view.
+	 */
 	public BufferedImage render(int width, int height, double resolution) {
-		
 		if (resolution < .01 || resolution > 1.0) {
 			throw new IllegalArgumentException();
 		}
@@ -32,7 +54,7 @@ public class Engine {
 		List<Sphere> objList = scene.getObjList();
 		
 		// ray tracing algorithm
-		for (int y = 0; y < height; y += 1 / resolution) {
+		for (int y = 0; y < height; y += (1 / resolution)) {
 			for (int x = 0; x < width; x+= 1 / resolution) {
 				
 				// values for mapping viewing plane to pixels
@@ -48,6 +70,7 @@ public class Engine {
 				Vector3D vertical = v.multiply(1);
 				Vector3D startPos = origin.subtract(horizontal.divide(2)).subtract(vertical.divide(2)).subtract(w);
 				
+				// raytracing
 				Ray ray = new Ray(camera.getLookFrom(), (startPos.add(horizontal.multiply(a)).add(vertical.multiply(b)).subtract(origin)).normalize()); //SHJAKLFHKASJDHF
 				Color color = raytrace(ray, objList, 0);
 				image.setRGB(x, y, (int) color.toInteger());
@@ -57,7 +80,23 @@ public class Engine {
 		return image;
 	}	
 	
-	public Color raytrace(Ray ray, List<Sphere> objList, int depth) {
+	/**
+	 * Gets the engine's scene object.
+	 * @return The engine's scene object.
+	 */
+	public Scene getScene() {
+		return scene;
+	}
+	
+	/**
+	 * Gets the engine's camera object.
+	 * @return The engine's camera object.
+	 */
+	public Camera getCamera() {
+		return camera;
+	}
+	
+	private Color raytrace(Ray ray, List<Sphere> objList, int depth) {
 		Color color = new Color();
 		
 		Map<Double, Sphere> map = findNearest(ray, objList);
@@ -90,8 +129,8 @@ public class Engine {
 		
 		return color;
 	}
-	
-	public Color colorAt(Sphere objHit, Vector3D hitPos, Vector3D normal, boolean isShadow) {
+
+	private Color colorAt(Sphere objHit, Vector3D hitPos, Vector3D normal, boolean isShadow) {
 		Material mat = objHit.getMaterial();
 		Color objColor = mat.colorAt(hitPos); mat.getColor();
 		
@@ -115,7 +154,7 @@ public class Engine {
 		return color;
 	}
 	
-	public boolean isShadow(Vector3D hitPos, Vector3D hitNormal, List<Sphere> sList) {
+	private boolean isShadow(Vector3D hitPos, Vector3D hitNormal, List<Sphere> sList) {
 		Vector3D dirToLight = scene.getLight().getPosition().toVector().subtract(hitPos);
 		
 		double t = 0;
@@ -128,7 +167,7 @@ public class Engine {
 		return false;
 	}
 	
-	public Map<Double, Sphere> findNearest(Ray ray, List<Sphere> objList) {
+	private Map<Double, Sphere> findNearest(Ray ray, List<Sphere> objList) {
 		double distMin = 0;
 		double dist = 0;
 		Sphere objHit = null;
@@ -146,13 +185,5 @@ public class Engine {
 		map.put(distMin, objHit);
 		
 		return map;
-	}
-	
-	public Scene getScene() {
-		return scene;
-	}
-	
-	public Camera getCamera() {
-		return camera;
 	}
 }
