@@ -16,19 +16,24 @@ public class Engine {
 	private Scene scene;
 	private Camera camera;
 	
+	
 	public Engine(Scene scene, Camera camera) {
 		this.scene = scene;
 		this.camera = camera;
 	}
 	
-	public BufferedImage render(int width, int height) {
+	public BufferedImage render(int width, int height, double resolution) {
+		
+		if (resolution < .01 || resolution > 1.0) {
+			throw new IllegalArgumentException();
+		}
 		
 		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		List<Sphere> objList = scene.getObjList();
 		
 		// ray tracing algorithm
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
+		for (int y = 0; y < height; y += 1 / resolution) {
+			for (int x = 0; x < width; x+= 1 / resolution) {
 				
 				// values for mapping viewing plane to pixels
 				float a = (float) x / (float) width;
@@ -43,7 +48,7 @@ public class Engine {
 				Vector3D vertical = v.multiply(1);
 				Vector3D startPos = origin.subtract(horizontal.divide(2)).subtract(vertical.divide(2)).subtract(w);
 				
-				Ray ray = new Ray(camera.getLookFrom(), startPos.add(horizontal.multiply(a)).add(vertical.multiply(b)).subtract(origin));
+				Ray ray = new Ray(camera.getLookFrom(), (startPos.add(horizontal.multiply(a)).add(vertical.multiply(b)).subtract(origin)).normalize()); //SHJAKLFHKASJDHF
 				Color color = raytrace(ray, objList, 0);
 				image.setRGB(x, y, (int) color.toInteger());
 			}
@@ -142,5 +147,12 @@ public class Engine {
 		
 		return map;
 	}
-
+	
+	public Scene getScene() {
+		return scene;
+	}
+	
+	public Camera getCamera() {
+		return camera;
+	}
 }

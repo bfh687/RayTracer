@@ -8,8 +8,8 @@ public class Camera {
 	private Vector3D lookFrom, lookTo;
 	
 	public Camera() {
-		lookFrom = new Vector3D(0, -2, -10);;
-		lookTo = new Vector3D(0, 0, 0);;
+		lookFrom = (new Vector3D(0, -.5, -10));
+		lookTo = new Vector3D(0, 0, 0);
 	}
 	
 	public Camera(Vector3D lookFrom, Vector3D lookTo) {
