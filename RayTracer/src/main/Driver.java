@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -18,7 +19,6 @@ import utility.Color;
 import utility.Light;
 import utility.Material;
 import utility.Point3D;
-import utility.Vector3D;
 
 /**
  * The driver class used for the GUI view of the raytracer.
@@ -55,7 +55,7 @@ public class Driver {
 		// creates scene and engine, and renders initial image
 		Scene scene = new Scene(light, objList);
 		Engine engine = new Engine(scene, camera);
-		BufferedImage image = engine.render(1280, 720, resolution);
+		BufferedImage image = engine.render(960, 540, resolution);
 		
 		// creates new frame and panel
 		JFrame frame = new JFrame();
@@ -73,8 +73,7 @@ public class Driver {
 	    		int keyCode = e.getKeyCode();
 	    		
 	    		if (keyCode == KeyEvent.VK_E || keyCode == KeyEvent.VK_Q) {
-	    			double change = resolution;
-	    			System.out.println(resolution);
+
 		    		if (keyCode == KeyEvent.VK_E) {
 		    			if (resolution < 1.0) {
 		    				resolution += .15;
@@ -87,41 +86,9 @@ public class Driver {
 		    			}
 		    		} 
 
-		    		if (change != resolution) {
-		    			label.setIcon(new ImageIcon(engine.render(1280, 720, resolution)));
-		    		}
-	    		} else {
-	    		
-		    		if (keyCode == KeyEvent.VK_W) {
-		    			engine.getCamera().setLookFrom(engine.getCamera().getLookFrom().add(new Vector3D(0, 0, 1)));
-		    			engine.getCamera().setLookTo(engine.getCamera().getLookTo().add(new Vector3D(0, 0, 1)));
-		    		} 
-		    		if (keyCode == KeyEvent.VK_A) {
-		    			engine.getCamera().setLookFrom(engine.getCamera().getLookFrom().add(new Vector3D(1, 0, 0)));
-		    			engine.getCamera().setLookTo(engine.getCamera().getLookTo().add(new Vector3D(1, 0, 0)));
-		    		} 
-		    		if (keyCode == KeyEvent.VK_S) {
-		    			engine.getCamera().setLookFrom(engine.getCamera().getLookFrom().add(new Vector3D(0, 0, -1)));
-		    			engine.getCamera().setLookTo(engine.getCamera().getLookTo().add(new Vector3D(0, 0, -1)));
-		    		} 
-		    		if (keyCode == KeyEvent.VK_D) {
-		    			engine.getCamera().setLookFrom(engine.getCamera().getLookFrom().add(new Vector3D(-1, 0, 0)));
-		    			engine.getCamera().setLookTo(engine.getCamera().getLookTo().add(new Vector3D(-1, 0, 0)));
-		    		}
-		    		
-		    		label.setIcon(new ImageIcon(engine.render(1280, 720, .1)));
-		    		
+		    		label.setIcon(new ImageIcon(engine.render(960, 540, resolution)));		    		
 	    		}
-
 	        }
-	    	
-	    	public void keyReleased(KeyEvent e) {
-	    		int keyCode = e.getKeyCode();
-	    		if (keyCode == KeyEvent.VK_W || keyCode == KeyEvent.VK_A ||
-	    			keyCode == KeyEvent.VK_S || keyCode == KeyEvent.VK_D) {
-	    			label.setIcon(new ImageIcon(engine.render(1280, 720, resolution)));
-	    		}
-	    	}
 	    });
 		
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

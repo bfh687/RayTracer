@@ -86,4 +86,8 @@ public class Sphere extends Intersectable {
 							ray.getOrigin().getY() - center.getY(),
 							ray.getOrigin().getZ() - center.getZ());
 	}
+	
+	public void setCenter(Vector3D vec) {
+		center = vec.toPoint();
+	}
 }

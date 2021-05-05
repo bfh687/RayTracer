@@ -55,28 +55,31 @@ public class Engine {
 		
 		// ray tracing algorithm
 		for (int y = 0; y < height; y += (1 / resolution)) {
-			for (int x = 0; x < width; x+= 1 / resolution) {
-				
+			for (int x = 0; x < width; x += (1 / resolution)) {
+
 				// values for mapping viewing plane to pixels
 				float a = (float) x / (float) width;
 				float b = (float) y / (float) height;
 
 				Vector3D w = ((camera.getLookFrom()).subtract(camera.getLookTo())).normalize();
-				Vector3D u = ((Camera.UP_VECTOR).cross(w));
+				Vector3D u = ((Camera.UP_VECTOR).cross(w)).normalize();
 				Vector3D v = w.cross(u);
 				
 				Vector3D origin = camera.getLookFrom();
-				Vector3D horizontal = u.multiply(2);
+
+			    Vector3D horizontal = u.multiply(2);
 				Vector3D vertical = v.multiply(1);
 				Vector3D startPos = origin.subtract(horizontal.divide(2)).subtract(vertical.divide(2)).subtract(w);
 				
-				// raytracing
-				Ray ray = new Ray(camera.getLookFrom(), (startPos.add(horizontal.multiply(a)).add(vertical.multiply(b)).subtract(origin)).normalize()); //SHJAKLFHKASJDHF
+				// raytracing 
+				Ray ray = new Ray(camera.getLookFrom(), (startPos.add(horizontal.multiply(a)).add(vertical.multiply(b)).subtract(origin)).normalize());
 				Color color = raytrace(ray, objList, 0);
+
+				// change image
 				image.setRGB(x, y, (int) color.toInteger());
+				
 			}
 		}
-		
 		return image;
 	}	
 	

@@ -157,4 +157,8 @@ public class Vector3D {
 	public double getZ() {
 		return z;
 	}
+	
+	public String toString() {
+		return x + " " + y + " " + z;
+	}
 }

@@ -51,4 +51,8 @@ public class Ray {
 	public Vector3D getDirection() {
 		return direction;
 	}
+	
+	public String toString() {
+		return direction.toString();
+	}
 }
