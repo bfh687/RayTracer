@@ -67,8 +67,8 @@ public class Vector3D {
 	 */
 	public Vector3D cross(Vector3D otherVector) {
 		double x = (this.y * otherVector.getZ()) - (this.z * otherVector.getY());
-		double y = (this.z * otherVector.getX()) - (this.z * otherVector.getZ());
-		double z = (this.x * otherVector.getY()) - (this.z * otherVector.getX());
+		double y = (this.z * otherVector.getX()) - (this.x * otherVector.getZ());
+		double z = (this.x * otherVector.getY()) - (this.y * otherVector.getX());
 		return new Vector3D(x, y, z);
 	}
 	

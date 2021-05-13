@@ -27,8 +27,8 @@ public class Camera {
 	 * Creates a camera object with default values.
 	 */
 	public Camera() {
-		lookFrom = (new Vector3D(0, -1, -10));
-		lookTo = new Vector3D(0, -1, -9);
+		lookFrom = (new Vector3D(10, -1, 3));
+		lookTo = new Vector3D(0, -1, 0);
 	}
 	
 	/**
