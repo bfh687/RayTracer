@@ -14,6 +14,21 @@ public class Camera {
 	public static final Vector3D UP_VECTOR = new Vector3D(0, 1, 0);
 	
 	/**
+	 * Forward vector used for vector calculations.
+	 */
+	public static final Vector3D FORWARD_VECTOR = new Vector3D(0, 0, -1);
+	
+	/**
+	 * Right vector used for vector calculations.
+	 */
+	public static final Vector3D RIGHT_VECTOR = new Vector3D(1, 0, 0);
+	
+	/**
+	 * Radians representation of orientation from the line: x = 0.
+	 */
+	private double theta;
+	
+	/**
 	 * Vector representation of the camera's origin.
 	 */
 	private Vector3D lookFrom;
@@ -27,8 +42,8 @@ public class Camera {
 	 * Creates a camera object with default values.
 	 */
 	public Camera() {
-		lookFrom = (new Vector3D(10, -1, 3));
-		lookTo = new Vector3D(0, -1, 0);
+		lookFrom = (new Vector3D(0, -1, -10));
+		lookTo = new Vector3D(0, -1, -9);
 	}
 	
 	/**
@@ -58,6 +73,14 @@ public class Camera {
 	}
 	
 	/**
+	 * Gets the theta value.
+	 * @return The theta value.
+	 */
+	public double getTheta() {
+		return theta;
+	}
+	
+	/**
 	 * Sets the lookFrom vector to the given value.
 	 * @param lookFrom The vector to set lookFrom to.
 	 */
@@ -72,4 +95,19 @@ public class Camera {
 	public void setLookTo(Vector3D lookTo) {
 		this.lookTo = lookTo;
 	}
+	
+	/**
+	 * Sets the theta value to the given value.
+	 * @param theta The value to set theta to.
+	 */
+	public void setTheta(double theta) {
+		this.theta = theta;
+	
+		Vector3D xDir = RIGHT_VECTOR.multiply(Math.cos(theta));
+		Vector3D zDir = FORWARD_VECTOR.multiply(Math.sin(theta));
+		
+		lookTo = lookFrom.add(xDir).add(zDir);
+	}
+	
+	
 }

@@ -19,6 +19,7 @@ import utility.Color;
 import utility.Light;
 import utility.Material;
 import utility.Point3D;
+import utility.Vector3D;
 
 /**
  * The driver class used for the GUI view of the raytracer.
@@ -49,7 +50,7 @@ public class Driver {
 		objList.add(new Sphere(new Point3D(0, 5, 10), 5, new Material(new Color(1, 1, 1), .05, 1, .5, .5)));
 		objList.add(new Sphere(new Point3D(0, -223300001, 0), 223300000, (new Material(new Color(1, 1, 1), new Color(), .05, 1, 1, .4))));
 		
-		// set default resolution to 1 / 100%
+		// set default resolution to .2 / 20%
 		resolution = 1;
 		
 		// creates scene and engine, and renders initial image
@@ -71,23 +72,47 @@ public class Driver {
 	    	@Override
 	        public void keyPressed(KeyEvent e) {
 	    		int keyCode = e.getKeyCode();
+	    		double theta = camera.getTheta();
+
+	    		Vector3D lookFrom = camera.getLookFrom();
+	    		Vector3D lookTo = camera.getLookTo();
 	    		
-	    		if (keyCode == KeyEvent.VK_E || keyCode == KeyEvent.VK_Q) {
-
-		    		if (keyCode == KeyEvent.VK_E) {
-		    			if (resolution < 1.0) {
-		    				resolution += .15;
-		    			}
-		    		} 
-		    		
-		    		if (keyCode == KeyEvent.VK_Q) {
-		    			if (resolution > .1) {
-		    				resolution -= .15;
-		    			}
-		    		} 
-
+	    		if (keyCode == KeyEvent.VK_E ) {
+	    			theta -= Math.PI / 12;
+	    			camera.setTheta(theta);
 		    		label.setIcon(new ImageIcon(engine.render(960, 540, resolution)));		    		
 	    		}
+	    		
+	    		if (keyCode == KeyEvent.VK_Q) {
+	    			theta += Math.PI / 12;
+	    			camera.setTheta(theta);
+	    			label.setIcon(new ImageIcon(engine.render(960, 540, resolution)));	
+	    		}
+	    		
+	    		if (keyCode == KeyEvent.VK_W ) {
+	    			camera.setLookFrom(lookFrom.add(new Vector3D(0, 0, 1)));
+	    			camera.setLookTo(lookTo.add(new Vector3D(0, 0, 1)));
+		    		label.setIcon(new ImageIcon(engine.render(960, 540, resolution)));		    		
+	    		}
+	    		
+	    		if (keyCode == KeyEvent.VK_A) {
+	    			camera.setLookFrom(lookFrom.add(new Vector3D(1, 0, 0)));
+	    			camera.setLookTo(lookTo.add(new Vector3D(1, 0, 0)));
+	    			label.setIcon(new ImageIcon(engine.render(960, 540, resolution)));	
+	    		}
+	    		
+	    		if (keyCode == KeyEvent.VK_S) {
+	    			camera.setLookFrom(lookFrom.add(new Vector3D(0, 0, -1)));
+	    			camera.setLookTo(lookTo.add(new Vector3D(0, 0, -1)));
+	    			label.setIcon(new ImageIcon(engine.render(960, 540, resolution)));	
+	    		}
+	    		
+	    		if (keyCode == KeyEvent.VK_D) {
+	    			camera.setLookFrom(lookFrom.add(new Vector3D(-1, 0, 0)));
+	    			camera.setLookTo(lookTo.add(new Vector3D(-1, 0, 0)));
+	    			label.setIcon(new ImageIcon(engine.render(960, 540, resolution)));	
+	    		}
+	    		
 	        }
 	    });
 		
