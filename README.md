@@ -5,9 +5,9 @@ Java-based ray tracer implementation. This project is done in native Java withou
 
 ## Features
 * Diffuse Shading
-* Specular Shading
+* Specular Shading (Blinn-Phong Model)
 * Shadows
-* Reflections (Blinn-Phong Model)
+* Reflections 
 * Checkerboard floor
 * Positionable Camera
 
