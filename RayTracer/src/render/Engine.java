@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import main.Driver;
 import shapes.Sphere;
 import utility.Color;
 import utility.Material;
@@ -21,7 +22,7 @@ public class Engine {
 	 * The scene.
 	 */
 	private Scene scene;
-	
+
 	/**
 	 * The camera.
 	 */
@@ -66,8 +67,10 @@ public class Engine {
 				Vector3D v = w.cross(u);
 				
 				Vector3D origin = camera.getLookFrom();
-
-			    Vector3D horizontal = u.multiply(2);
+				
+				double aspectRatio = Driver.WIDTH / Driver.HEIGHT;
+				
+			    Vector3D horizontal = u.multiply(aspectRatio);
 				Vector3D vertical = v.multiply(1);
 				Vector3D startPos = origin.subtract(horizontal.divide(2)).subtract(vertical.divide(2)).subtract(w);
 				
@@ -77,9 +80,10 @@ public class Engine {
 
 				// change image
 				image.setRGB(x, y, (int) color.toInteger());
-				
+
 			}
 		}
+
 		return image;
 	}	
 	
@@ -135,7 +139,7 @@ public class Engine {
 
 	private Color colorAt(Sphere objHit, Vector3D hitPos, Vector3D normal, boolean isShadow) {
 		Material mat = objHit.getMaterial();
-		Color objColor = mat.colorAt(hitPos); mat.getColor();
+		Color objColor = mat.colorAt(hitPos);
 		
 		Vector3D toCam = camera.getLookFrom().subtract(hitPos).normalize();
 		Color color = (new Color(0, 0, 0)).multiply(mat.getAmbient());

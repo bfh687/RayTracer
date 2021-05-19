@@ -3,6 +3,7 @@ package main;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,16 +31,26 @@ public class Driver {
 	/**
 	 * Render scaling resolution.
 	 */
-	private static double resolution;
+	public static final double RESOLUTION = 1.0;
+	
+	/**
+	 * Render screen width.
+	 */
+	public static final int WIDTH = 960;
+	
+	/**
+	 * Render screen height.
+	 */
+	public static final int HEIGHT = 480;
 	
 	/**
 	 * The application's entry point.
 	 * @param args The command-line arguments.
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		
 		// create a new Light and Camera
-		Light light = new Light(new Point3D(25, 50, -25), new Color(1, 1, 1));
+		Light light = new Light(new Point3D(0, 50, -25), new Color(1, 1, 1));
 		Camera camera = new Camera();
 		
 		// test object spheres (origin, radius, color)
@@ -49,14 +60,11 @@ public class Driver {
 		objList.add(new Sphere(new Point3D(2.1, 0, 0), 1, new Material(new Color(0, 0, 1))));
 		objList.add(new Sphere(new Point3D(0, 5, 10), 5, new Material(new Color(1, 1, 1), .05, 1, .5, .5)));
 		objList.add(new Sphere(new Point3D(0, -223300001, 0), 223300000, (new Material(new Color(1, 1, 1), new Color(), .05, 1, 1, .4))));
-		
-		// set default resolution to .2 / 20%
-		resolution = 1;
-		
+
 		// creates scene and engine, and renders initial image
 		Scene scene = new Scene(light, objList);
 		Engine engine = new Engine(scene, camera);
-		BufferedImage image = engine.render(960, 540, resolution);
+		BufferedImage image = engine.render(WIDTH, HEIGHT, RESOLUTION);
 		
 		// creates new frame and panel
 		JFrame frame = new JFrame();
@@ -80,42 +88,42 @@ public class Driver {
 	    		if (keyCode == KeyEvent.VK_E ) {
 	    			theta -= Math.PI / 12;
 	    			camera.setTheta(theta);
-		    		label.setIcon(new ImageIcon(engine.render(960, 540, resolution)));		    		
+	    			label.setIcon(new ImageIcon(engine.render(WIDTH, HEIGHT, RESOLUTION)));
 	    		}
 	    		
 	    		if (keyCode == KeyEvent.VK_Q) {
 	    			theta += Math.PI / 12;
 	    			camera.setTheta(theta);
-	    			label.setIcon(new ImageIcon(engine.render(960, 540, resolution)));	
+	    			label.setIcon(new ImageIcon(engine.render(WIDTH, HEIGHT, RESOLUTION)));
 	    		}
 	    		
 	    		if (keyCode == KeyEvent.VK_W ) {
 	    			camera.setLookFrom(lookFrom.add(new Vector3D(0, 0, 1)));
 	    			camera.setLookTo(lookTo.add(new Vector3D(0, 0, 1)));
-		    		label.setIcon(new ImageIcon(engine.render(960, 540, resolution)));		    		
+	    			label.setIcon(new ImageIcon(engine.render(WIDTH, HEIGHT, RESOLUTION)));    		
 	    		}
 	    		
 	    		if (keyCode == KeyEvent.VK_A) {
 	    			camera.setLookFrom(lookFrom.add(new Vector3D(1, 0, 0)));
 	    			camera.setLookTo(lookTo.add(new Vector3D(1, 0, 0)));
-	    			label.setIcon(new ImageIcon(engine.render(960, 540, resolution)));	
+	    			label.setIcon(new ImageIcon(engine.render(WIDTH, HEIGHT, RESOLUTION)));
 	    		}
 	    		
 	    		if (keyCode == KeyEvent.VK_S) {
 	    			camera.setLookFrom(lookFrom.add(new Vector3D(0, 0, -1)));
 	    			camera.setLookTo(lookTo.add(new Vector3D(0, 0, -1)));
-	    			label.setIcon(new ImageIcon(engine.render(960, 540, resolution)));	
+	    			label.setIcon(new ImageIcon(engine.render(WIDTH, HEIGHT, RESOLUTION)));
 	    		}
 	    		
 	    		if (keyCode == KeyEvent.VK_D) {
 	    			camera.setLookFrom(lookFrom.add(new Vector3D(-1, 0, 0)));
 	    			camera.setLookTo(lookTo.add(new Vector3D(-1, 0, 0)));
-	    			label.setIcon(new ImageIcon(engine.render(960, 540, resolution)));	
+	    			label.setIcon(new ImageIcon(engine.render(WIDTH, HEIGHT, RESOLUTION)));
 	    		}
 	    		
 	        }
 	    });
-		
+
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 		frame.pack();

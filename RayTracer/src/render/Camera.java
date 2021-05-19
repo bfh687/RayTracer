@@ -42,8 +42,8 @@ public class Camera {
 	 * Creates a camera object with default values.
 	 */
 	public Camera() {
-		lookFrom = (new Vector3D(0, -1, -10));
-		lookTo = new Vector3D(0, -1, -9);
+		lookFrom = (new Vector3D(0, -1, -15));
+		lookTo = new Vector3D(0, -1, -10);
 	}
 	
 	/**
@@ -108,6 +108,4 @@ public class Camera {
 		
 		lookTo = lookFrom.add(xDir).add(zDir);
 	}
-	
-	
 }
