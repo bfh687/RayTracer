@@ -1,7 +1,6 @@
 package main;
 
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,7 +19,6 @@ import utility.Color;
 import utility.Light;
 import utility.Material;
 import utility.Point3D;
-import utility.Vector3D;
 
 /**
  * The driver class used for the GUI view of the raytracer.
@@ -36,12 +34,12 @@ public class Driver {
 	/**
 	 * Render screen width.
 	 */
-	public static final int WIDTH = 960;
+	public static final int WIDTH = 960 * 2;
 	
 	/**
 	 * Render screen height.
 	 */
-	public static final int HEIGHT = 480;
+	public static final int HEIGHT = 480 * 2;
 	
 	/**
 	 * The application's entry point.
@@ -64,7 +62,18 @@ public class Driver {
 		// creates scene and engine, and renders initial image
 		Scene scene = new Scene(light, objList);
 		Engine engine = new Engine(scene, camera);
+		
+		// record time taken to render scene
+		long start = System.currentTimeMillis();
 		BufferedImage image = engine.render(WIDTH, HEIGHT, RESOLUTION);
+		long end = System.currentTimeMillis();   
+		System.out.println("Elapsed Time in milli seconds: "+ (end - start));
+		
+		// draw look-from and look-to onto final render
+		Graphics2D g = (Graphics2D) image.getGraphics();
+		g.setColor(java.awt.Color.WHITE);
+		g.drawString("look from: " + camera.getLookFrom(), 10, 15);
+		g.drawString("look to: " + camera.getLookTo(), 10, 30);
 		
 		// creates new frame and panel
 		JFrame frame = new JFrame();
@@ -75,57 +84,9 @@ public class Driver {
 		JLabel label = new JLabel(new ImageIcon(image));
 	    panel.add(label);
 	    
-	    // handles key events for WASD movement
-	    frame.addKeyListener(new KeyAdapter() {
-	    	@Override
-	        public void keyPressed(KeyEvent e) {
-	    		int keyCode = e.getKeyCode();
-	    		double theta = camera.getTheta();
-
-	    		Vector3D lookFrom = camera.getLookFrom();
-	    		Vector3D lookTo = camera.getLookTo();
-	    		
-	    		if (keyCode == KeyEvent.VK_E ) {
-	    			theta -= Math.PI / 12;
-	    			camera.setTheta(theta);
-	    			label.setIcon(new ImageIcon(engine.render(WIDTH, HEIGHT, RESOLUTION)));
-	    		}
-	    		
-	    		if (keyCode == KeyEvent.VK_Q) {
-	    			theta += Math.PI / 12;
-	    			camera.setTheta(theta);
-	    			label.setIcon(new ImageIcon(engine.render(WIDTH, HEIGHT, RESOLUTION)));
-	    		}
-	    		
-	    		if (keyCode == KeyEvent.VK_W ) {
-	    			camera.setLookFrom(lookFrom.add(new Vector3D(0, 0, 1)));
-	    			camera.setLookTo(lookTo.add(new Vector3D(0, 0, 1)));
-	    			label.setIcon(new ImageIcon(engine.render(WIDTH, HEIGHT, RESOLUTION)));    		
-	    		}
-	    		
-	    		if (keyCode == KeyEvent.VK_A) {
-	    			camera.setLookFrom(lookFrom.add(new Vector3D(1, 0, 0)));
-	    			camera.setLookTo(lookTo.add(new Vector3D(1, 0, 0)));
-	    			label.setIcon(new ImageIcon(engine.render(WIDTH, HEIGHT, RESOLUTION)));
-	    		}
-	    		
-	    		if (keyCode == KeyEvent.VK_S) {
-	    			camera.setLookFrom(lookFrom.add(new Vector3D(0, 0, -1)));
-	    			camera.setLookTo(lookTo.add(new Vector3D(0, 0, -1)));
-	    			label.setIcon(new ImageIcon(engine.render(WIDTH, HEIGHT, RESOLUTION)));
-	    		}
-	    		
-	    		if (keyCode == KeyEvent.VK_D) {
-	    			camera.setLookFrom(lookFrom.add(new Vector3D(-1, 0, 0)));
-	    			camera.setLookTo(lookTo.add(new Vector3D(-1, 0, 0)));
-	    			label.setIcon(new ImageIcon(engine.render(WIDTH, HEIGHT, RESOLUTION)));
-	    		}
-	    		
-	        }
-	    });
-
+	    // final jframe operations
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setResizable(false);
+	    frame.setResizable(false);
 		frame.pack();
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);

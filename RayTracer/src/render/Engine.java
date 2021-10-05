@@ -19,6 +19,11 @@ import utility.Vector3D;
 public class Engine {
 	
 	/**
+	 * The amount of threads allocated to the render engine.
+	 */
+	public static final int THREADS = 4;
+	
+	/**
 	 * The scene.
 	 */
 	private Scene scene;
@@ -53,7 +58,7 @@ public class Engine {
 		
 		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		List<Sphere> objList = scene.getObjList();
-		
+
 		// ray tracing algorithm
 		for (int y = 0; y < height; y += (1 / resolution)) {
 			for (int x = 0; x < width; x += (1 / resolution)) {
