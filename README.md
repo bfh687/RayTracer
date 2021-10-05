@@ -1,6 +1,6 @@
 ![demo-min](https://user-images.githubusercontent.com/57474145/118775204-880bfb80-b83b-11eb-8f6c-6a66795a6da7.gif)
 
-# RayTracer
+## RayTracer
 Java-based ray tracer implementation. This project is done in native Java without the use of any APIs. In addition, all processing is done on the CPU. Above is a GIF showcasing each individual part of the final render.
 
 ## Features
