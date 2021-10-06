@@ -4,6 +4,9 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import main.Driver;
 import shapes.Sphere;
@@ -21,8 +24,8 @@ public class Engine {
 	/**
 	 * The amount of threads allocated to the render engine.
 	 */
-	public static final int THREADS = 4;
-	
+	public static final int THREADS = Runtime.getRuntime().availableProcessors();
+
 	/**
 	 * The scene.
 	 */
@@ -50,45 +53,29 @@ public class Engine {
 	 * @param height Height of the rendered image.
 	 * @param resolution Render scaling resolution.
 	 * @return A rendered image of the current camera view.
+	 * @throws InterruptedException 
 	 */
-	public BufferedImage render(int width, int height, double resolution) {
+	public BufferedImage render(int width, int height, double resolution) throws InterruptedException {
 		if (resolution < .01 || resolution > 1.0) {
 			throw new IllegalArgumentException();
 		}
-		
+
 		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		List<Sphere> objList = scene.getObjList();
-
-		// ray tracing algorithm
-		for (int y = 0; y < height; y += (1 / resolution)) {
-			for (int x = 0; x < width; x += (1 / resolution)) {
-
-				// values for mapping viewing plane to pixels
-				float a = (float) x / (float) width;
-				float b = (float) y / (float) height;
-
-				Vector3D w = ((camera.getLookFrom()).subtract(camera.getLookTo())).normalize();
-				Vector3D u = ((Camera.UP_VECTOR).cross(w)).normalize();
-				Vector3D v = w.cross(u);
-				
-				Vector3D origin = camera.getLookFrom();
-				
-				double aspectRatio = Driver.WIDTH / Driver.HEIGHT;
-				
-			    Vector3D horizontal = u.multiply(aspectRatio);
-				Vector3D vertical = v.multiply(1);
-				Vector3D startPos = origin.subtract(horizontal.divide(2)).subtract(vertical.divide(2)).subtract(w);
-				
-				// raytracing 
-				Ray ray = new Ray(camera.getLookFrom(), (startPos.add(horizontal.multiply(a)).add(vertical.multiply(b)).subtract(origin)).normalize());
-				Color color = raytrace(ray, objList, 0);
-
-				// change image
-				image.setRGB(x, y, (int) color.toInteger());
-
-			}
+		
+		ExecutorService pool = Executors.newFixedThreadPool(THREADS);
+		
+		for (int threadNum = 0; threadNum < THREADS; threadNum++) {
+			pool.execute(createRenderThread(threadNum, image, objList, width, height));
 		}
-
+		pool.shutdown();
+		
+		try {
+			pool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
 		return image;
 	}	
 	
@@ -107,6 +94,40 @@ public class Engine {
 	public Camera getCamera() {
 		return camera;
 	}
+	
+	private Runnable createRenderThread(final int threadNum, final BufferedImage image, final List<Sphere> objList, final int width, final int height) {
+        return new Runnable() {
+        	@Override
+			public void run() {
+				for (int j = threadNum * (width / THREADS); j < (threadNum + 1) * (width / THREADS); j++) {
+					for (int k = 0; k < height; k++) {
+						// values for mapping viewing plane to pixels
+						float a = (float) j / (float) width;
+						float b = (float) k / (float) height;
+
+						Vector3D w = ((camera.getLookFrom()).subtract(camera.getLookTo())).normalize();
+						Vector3D u = ((Camera.UP_VECTOR).cross(w)).normalize();
+						Vector3D v = w.cross(u);
+						
+						Vector3D origin = camera.getLookFrom();
+						
+						double aspectRatio = (double) Driver.WIDTH / (double) Driver.HEIGHT;
+
+					    Vector3D horizontal = u.multiply(aspectRatio);
+						Vector3D vertical = v.multiply(1);
+						Vector3D startPos = origin.subtract(horizontal.divide(2)).subtract(vertical.divide(2)).subtract(w);
+						
+						// raytracing 
+						Ray ray = new Ray(camera.getLookFrom(), (startPos.add(horizontal.multiply(a)).add(vertical.multiply(b)).subtract(origin)).normalize());
+						Color color = raytrace(ray, objList, 0);
+
+						// update image rgb
+						image.setRGB(j, k, (int) color.toInteger());
+					}
+				}
+			}
+        };
+    }
 	
 	private Color raytrace(Ray ray, List<Sphere> objList, int depth) {
 		Color color = new Color();

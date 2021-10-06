@@ -25,7 +25,7 @@ import utility.Point3D;
  * @author bfh687
  */
 public class Driver {
-	
+
 	/**
 	 * Render scaling resolution.
 	 */
@@ -34,12 +34,12 @@ public class Driver {
 	/**
 	 * Render screen width.
 	 */
-	public static final int WIDTH = 960 * 2;
+	public static final int WIDTH = 3840;
 	
 	/**
 	 * Render screen height.
 	 */
-	public static final int HEIGHT = 480 * 2;
+	public static final int HEIGHT = 2160;
 	
 	/**
 	 * The application's entry point.
@@ -63,11 +63,12 @@ public class Driver {
 		Scene scene = new Scene(light, objList);
 		Engine engine = new Engine(scene, camera);
 		
-		// record time taken to render scene
-		long start = System.currentTimeMillis();
-		BufferedImage image = engine.render(WIDTH, HEIGHT, RESOLUTION);
-		long end = System.currentTimeMillis();   
-		System.out.println("Elapsed Time in milli seconds: "+ (end - start));
+		BufferedImage image = null;
+		try {
+			image = engine.render(WIDTH, HEIGHT, RESOLUTION);
+		} catch (InterruptedException e) {
+			System.exit(1);
+		}
 		
 		// draw look-from and look-to onto final render
 		Graphics2D g = (Graphics2D) image.getGraphics();
