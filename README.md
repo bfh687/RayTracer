@@ -12,13 +12,6 @@ Java-based ray tracer implementation. This project is done in native Java withou
 * Positionable Camera
 * Multi-Thread Support
 
-## TODO
-* Anti-Aliasing
-* Defocus Blur
-* Visible Lights
-* More Shapes (Planes, Triangles, Cubes, etc.)
-* OBJ File Support
-
 # Gallery
 ![Screenshot_2](https://user-images.githubusercontent.com/57474145/118783296-cad1d180-b843-11eb-9b3d-a9c01d62479a.png)
 
