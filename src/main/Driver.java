@@ -34,12 +34,12 @@ public class Driver {
 	/**
 	 * Render screen width.
 	 */
-	public static final int WIDTH = 3840;
+	public static final int WIDTH = 3840 / 3;
 	
 	/**
 	 * Render screen height.
 	 */
-	public static final int HEIGHT = 2160;
+	public static final int HEIGHT = 2160 / 3;
 	
 	/**
 	 * The application's entry point.
